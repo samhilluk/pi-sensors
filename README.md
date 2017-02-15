@@ -3,14 +3,22 @@ The Raspberry PI is a fantastic device and great for the hobbist or anyone who j
 
 Using sensors can at the start seem a little daunting however its actually really quite simple.
 
+This guide will walk through a number of different sensors and python scripts are provided to show how to use them "in code".
+
+Sensors covered:
+
+- Temperature Sensor
+
+
+
 
 ## Temperature Sensor
 
-The easiest sensor to start with is the temperature sensor, most people use the **DALLAS 18B20** sensor which you can pick up for a few pennies on various websites, is a digital sensor and runs at 3V so no risk of frying the Raspberry PI.
+The easiest sensor to start with is with the temperature sensor, most people use the **DALLAS 18B20** sensor which you can pick up for a few pennies on various websites, this is a digital sensor and runs at 3V so no risk of frying the Raspberry PI.
 
 ### Wiring the sensor
 
-Once you have the sensor you need to connect it up, the easiest way is as follows, however the pins you use can be (to a certain extent) varied as there are multiple £v out, ground and data in pins available. The way I do it is as shown in this picture:
+Once you have the sensor you need to connect it up, the easiest way is as follows, however the pins you use can be (to a certain extent) varied as there are multiple 3V out, ground and data in pins available. The way I have done it is as shown in this picture:
 
 ![Wiring diagram](https://github.com/samhilluk/pi-sensors/raw/master/wiring.png)
 
@@ -47,7 +55,7 @@ root@raspberrypi:/home/sam# cat /sys/bus/w1/devices/28-011515e78cff/w1_slave
 0a 01 55 00 7f ff 0c 10 64 : crc=64 YES
 0a 01 55 00 7f ff 0c 10 64 t=16625
 ```
-Replace the unique sensor address with your own (28-011515e78cff above will not the identifier for your sensor as that is my unique code).
+Replace the unique sensor address with your own (28-011515e78cff above will not be the identifier for your sensor as that is my unique code).
 
 That is it - it works we have a temperature sensor. The temperature is given by the `t=...` value, that needs to be made into something meaningful - its actually simply a case of dividing by 1000 the number returned (16.625 degrees in my example here).
 
@@ -72,7 +80,7 @@ There are lots of ways to interact with the sensor, the easist is with the comma
 cat /sys/bus/w1/devices/28-011515e78cff/w1_slave | sed -n 's/^.*\(t=[^ ]*\).*/\1/p' | sed 's/t=//' | awk '{x=$1}END{print(x/1000)}'
 ```
 
-This uses a bit of `sed` and `awk` magic to convert it into something useful, again, replace the sensor address - starts 28 - with your own (28-011515e78cff above will not the identifier for your sensor as that is my unique code).
+This uses a bit of `sed` and `awk` magic to convert it into something useful, again, replace the sensor address - starts 28 - with your own (28-011515e78cff above will not be the identifier for your sensor as that is my unique code).
 
 
 To help here I have a simple **python** script that will read the sensor and then convert the value into both Celsius and Fahrenheit - available here [temp.py](https://github.com/samhilluk/pi-sensors/raw/master/temp.py "temp.py").
